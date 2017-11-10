@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+
+#header{
+	background-color: aqua;	
+}
+
+#menu{
+	background-color: aquamarine;
+}
+
+#content{
+	background-color: bisque;
+}
+
+#wrapper{
+	width: 1000px;
+	margin: 0 auto;
+}
