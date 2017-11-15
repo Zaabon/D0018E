@@ -13,49 +13,18 @@
 
 <body>
   <div id="product">
-		<h1>
-      <?php
-			  $sql = "SELECT name FROM Articles where name='".$_POST['name']."'";
-			  $row = $conn->query($sql);
-			
-			  foreach ($conn->query($sql) as $r){
-				  echo $r[0];
-			  }
-		  ?>
-		</h1>
+		
 		<p>
-			Price:
 			<?php
-			  $sql = "SELECT price FROM Articles where name='".$_POST['name']."'";
-			  $row = $conn->query($sql);
-			
-			  foreach ($conn->query($sql) as $r){
-				  echo $r[0];
-			  }
+			  $sql = "SELECT * FROM Articles where id='".$_GET['id']."'"; 
+			foreach ($conn->query($sql) as $row) {
+				echo "<p><h1>".$row['name']."</h1></p>";
+				echo "<img src='gfx/".$row['picture']."' style='max-width:100px; max-height:100px;'>";
+				echo "<p>Price: ".$row['price']."</p>";
+				echo "<p>In stock: ".$row['stock']."</p>";
+				echo "<p>Description: ".$row['description']."</p>";
+			}
 		  ?>
-		</p>
-		<p>
-			In stock:
-			<?php
-			  $sql = "SELECT stock FROM Articles where name='".$_POST['name']."'";
-			  $row = $conn->query($sql);
-			
-			  foreach ($conn->query($sql) as $r){
-				  echo $r[0];
-			  }
-		  ?>
-		</p>
-		<p>
-			Description:
-			<?php
-			  $sql = "SELECT description FROM Articles where name='".$_POST['name']."'";
-			  $row = $conn->query($sql);
-			
-			  foreach ($conn->query($sql) as $r){
-				  echo $r[0];
-			  }
-		  ?>
-		</p>
 </body>
 
 </html>

@@ -1,19 +1,35 @@
 @charset "utf-8";
 /* CSS Document */
 
+body {
+
+}
+
 #header{
-	background-color: aqua;	
+	background-color: white;	
+	padding:20px;
 }
 
 #menu{
-	background-color: aquamarine;
+	background-color: white;
+	padding:20px;
 }
 
 #content{
-	background-color: bisque;
+	background-color: white;
+	padding:20px;
+	height:100%;
 }
 
 #wrapper{
+	background-color:#DDDDDD;
 	width: 1000px;
 	margin: 0 auto;
+	margin-top:-30px;
+	padding:20px;
+}
+
+#thumb{
+    width: 50px;
+    height: 50px;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php	
 	echo "<table style='border: solid 1px black;'>";
  echo "<tr><th>Email</th></tr>";
 
@@ -52,24 +52,26 @@ echo $_POST['email'];
 
 $sql = "SELECT * FROM Accounts WHERE Email='".$_POST['email']."'"; 
 foreach ($conn->query($sql) as $row) {
-
-        $pwd = $row['Pwd'];
+        $pwd = $row['pwd'];
 }
-echo $_POST['pwd'] ;
+
+echo $_POST['pwd'];
 if($_POST['pwd'] == $pwd) {
-echo "Ok";
-
-	$cookie_name = "user";
-	$cookie_value = "".$_POST['email']."";
-	setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
-
+	echo "Ok";
+	$_SESSION["user"] = $row['id'];
+	echo "ID: ".$_SESSION["user"];
+	
 }
 else {
-echo "nope";
+	echo "Login failed";
+	header('Location: ' . $_SERVER['HTTP_REFERER']."?error=login");
 }
 
+echo "<br><a href='".$_SERVER['HTTP_REFERER']."'>Go back</a>";
 
 $conn = null;
+
+
 //header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 ?>
