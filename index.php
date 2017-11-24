@@ -180,7 +180,6 @@
 		</table>
 
 
-		</div>
 	
 		<div id="categories">
 			<h4>Categories</h4>
