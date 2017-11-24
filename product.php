@@ -7,7 +7,7 @@
 		<title>Test</title>
 
 
-		<link href="stylesheat.css" rel="stylesheet" type="text/css">
+		<link href="stylesheat.css" rel="stylesheet" type="text/css">	
 
 	</head>
 
@@ -24,10 +24,55 @@
 						echo "<p>Price: ".$row['price'].":-</p>";
 						echo "<p>In stock: ".$row['stock']."</p>";
 						echo "<p>Description: ".$row['description']."</p>";
+						echo "<p>Rate: ".round($row['rate'], 1, PHP_ROUND_HALF_DOWN)."</p>";
 						echo "<p>Category: <a href='category.php?category=".$row['category']."'>".$row['category']."</a></p>";
 					}
 			  	?>
 			</p>
+			
+			<div id="rate">
+				<h3>Rate: </h3>
+				<form action="./rate.php" method="post" id="rate_form" name="rate_form">
+					<span class="rating">
+					  <input id="rating1" type="radio" name="rating" value="1" required>
+					  <label for="rating1">1</label>
+					  <input id="rating2" type="radio" name="rating" value="2">
+					  <label for="rating2">2</label>
+					  <input id="rating3" type="radio" name="rating" value="3">
+					  <label for="rating3">3</label>
+					  <input id="rating4" type="radio" name="rating" value="4">
+					  <label for="rating4">4</label>
+					  <input id="rating5" type="radio" name="rating" value="5">
+					  <label for="rating5">5</label>
+					  <input type="hidden" name="product" value="<?php echo $_GET['id'];?>">
+					  <input type="submit" value="Submitt"/>
+					</span>
+				</form>
+			</div>
+			
+			<div id="comment">
+				<?php
+					echo "<h2>Commens:</h2>";
+					$sql2 = "SELECT * FROM Comments where article_id='".$_GET['id']."'";
+					foreach ($conn->query($sql2) as $row) {
+						echo "<p><h3>".$row['name']."</h3></p>";
+						echo "<p>".$row['time']."</p>";
+						echo "<p>".$row['comment']."</p>";
+					}
+				?>
+				
+				<form action="./comment.php" method="post" id="comment_form" name="comment_form">
+					<p>
+						Name: <br>
+						<input type="text" id="name" name="name"/> <br>
+						Comment: <br>
+						<input type="text" id="comment"name="comment"/> <br>
+						<input type="hidden" name="product" value="<?php echo $_GET['id'];?>">
+						<input type="hidden" name="date" value="<?php echo date("Y-m-d h:i:s");?>">
+						<input type="submit" id="leave_comment" value="Send">
+					</p>
+				</form>
+			</div>
 		</div>
 	</body>
 	<?php $conn = null; ?>
