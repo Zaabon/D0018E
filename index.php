@@ -181,6 +181,36 @@
 
 
 		</div>
+	
+		<div id="categories">
+			<h4>Categories</h4>
+			<table>
+				<tr>
+			    		<?php
+			    			$sql = "SELECT category FROM Articles"; 
+			    			$catArr = array();
+						foreach ($conn->query($sql) as $row) {
+							if(!(in_array($row['category'], $catArr))){
+								$catArr[] = ($row['category']);
+								echo "<th><a href='category.php?category=".$row['category']."'>".$row['category']."</a><th>";
+							}	
+						}
+					?>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="highest_rates">
+		
+			<h4>Highest rates: </h4>
+			<?php
+				$sql = "SELECT name, rate, id FROM Articles ORDER BY rate DESC";
+				foreach ($conn->query($sql) as $row) {
+					echo "<a href='product.php?id=".$row['id']."'>".$row['name']."</a> - ".round($row['rate'], 1)."<p>\n</p>";
+				}
+				
+			?>
+		</div>
 	</div>
 
 
