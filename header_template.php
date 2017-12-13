@@ -35,7 +35,7 @@
 											$cart = $conn->prepare($cart);
 											$cart->execute();
 				
-											echo '<form action="/~olfjoh-5/order.php" method="post">';
+											echo '<form action="./order.php" method="post">';
 											
 											$total=0;
 											foreach ($conn->query($articles) as $row) {

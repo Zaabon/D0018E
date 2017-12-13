@@ -95,7 +95,6 @@
 												<input type="text" id="name" name="name" placeholder="Name" required=true/> <br>
 												<textarea type="text" id="comment"name="comment" placeholder="Comment" rows="6" cols="40" required=true></textarea> <br>
 												<input type="hidden" name="product" value="<?php echo $_GET['id'];?>">
-												<input type="hidden" name="date" value="<?php echo date("Y-m-d h:i:s");?>">
 												<input type="submit" id="buy" value="Submit">
 											</p>
 										</form>

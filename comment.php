@@ -20,7 +20,7 @@
 		$_SESSION['comment_error_msg'] = "Sorry, you need to fill in a comment. Please try again.";
 	}
 	if($post){
-		$sql = "INSERT INTO Comments (article_id, comment, name, time) VALUES ('".$_POST['product']."', '".$_POST['comment']."', '".$_POST['name']."', '".$_POST['date']."')";
+		$sql = "INSERT INTO Comments (article_id, comment, name) VALUES ('".$_POST['product']."', '".$_POST['comment']."', '".$_POST['name']."')";
 		$stmt = $conn->prepare($sql);
 		$stmt->execute();
 	}
