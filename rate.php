@@ -21,6 +21,6 @@
 	
 	echo "new rate: ".$rate;
 	
-	echo "<br><a href='".$_SERVER['HTTP_REFERER']."'>Go back</a>";
+	header('location: ' .$_SERVER['HTTP_REFERER']);
 	$conn = null;
 ?>

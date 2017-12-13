@@ -7,8 +7,8 @@ echo $id."<br>";
 echo $_POST['email']."<br>";
 echo $_POST['pwd']."<br>";
 
-$sql = sprintf("INSERT into Accounts (id, email, pwd, isAdmin)
-		VALUES (%u, '%s', '%s', 0)", $id, $_POST['email'], $_POST['pwd']);
+$sql = sprintf("INSERT into Accounts (id, email, pwd)
+		VALUES (%u, '%s', '%s')", $id, $_POST['email'], password_hash($_POST['pwd'], PASSWORD_DEFAULT));
 		
 echo $sql."<br>";
 

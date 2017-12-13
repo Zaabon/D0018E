@@ -1,7 +1,15 @@
 <?php include 'connect.php';
 
-
-if(isset($_GET['remove'])) {
+if(isset($_POST['commentRemove'])) {
+	echo $_POST['id'];
+	$sql = "DELETE FROM Comments WHERE id = ".$_POST['id']."";
+	$conn->query($sql);
+	
+	$conn = null;
+	header('Location: ' . $_SERVER['HTTP_REFERER']); 
+	
+}
+else if(isset($_GET['remove'])) {
 	$query1 = "DELETE FROM Articles WHERE id = ".$_GET['id']."";
 	$query2 = "DELETE FROM Tags WHERE articleID = ".$_GET['id']."";
 	$query3 = "DELETE FROM Comments WHERE article_id = ".$_GET['id']."";
@@ -100,38 +108,38 @@ else if(isset($_POST['create'])) {
 	if(isset($_POST["submit"])) {
 		$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
 		if($check !== false) {
-		    echo "File is an image - " . $check["mime"] . ".";
+		    $_SESSION['image_error_msg'] =  "File is an image - " . $check["mime"] . ".";
 		    $uploadOk = 1;
 		} else {
-		    echo "File is not an image.";
+		    $_SESSION['image_error_msg'] =  "File is not an image.";
 		    $uploadOk = 0;
 		}
 	}
 	// Check if file already exists
 	if (file_exists($target_file)) {
-		echo "Sorry, file already exists.";
+		$_SESSION['image_error_msg'] =  "Sorry, file already exists.";
 		$uploadOk = 0;
 	}
 	// Check file size
 	if ($_FILES["image"]["size"] > 500000) {
-		echo "Sorry, your file is too large.";
+		$_SESSION['image_error_msg'] =  "Sorry, your file is too large.";
 		$uploadOk = 0;
 	}
 	// Allow certain file formats
 	if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 	&& $imageFileType != "gif" ) {
-		echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+		$_SESSION['image_error_msg'] =  "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 		$uploadOk = 0;
 	}
 	// Check if $uploadOk is set to 0 by an error
 	if ($uploadOk == 0) {
-		echo "Sorry, your file was not uploaded.";
+		$_SESSION['image_error_msg'] =  "Sorry, your file was not uploaded.";
 	// if everything is ok, try to upload file
 	} else {
 		if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-		    echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+		    $_SESSION['image_error_msg'] =  "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
 		} else {
-		    echo "Sorry, there was an error uploading your file.";
+		    $_SESSION['image_error_msg'] =  "Sorry, there was an error uploading your file.";
 		}
 	}*/
 	
