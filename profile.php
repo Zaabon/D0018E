@@ -83,9 +83,20 @@
 				
 				<?php
 					if(isset($_POST['change_email'])){
-						$emailsql = "UPDATE Accounts SET email ='".$_POST['new_email']."' WHERE id = ".$_SESSION['user'];
-						$stmt = $conn->prepare($emailsql);
-						$stmt->execute();
+						$check ="SELECT email from Accounts where email='".$_POST['new_email']."'";
+						$exists = false;
+						foreach($conn->query($check) as $row){
+							$exists = true;
+						}
+
+						if($exists){
+							$_SESSION['login_error_msg'] = "Sorry, this email is already used. Please try again.";
+						}
+						else{
+							$emailsql = "UPDATE Accounts SET email ='".$_POST['new_email']."' WHERE id = ".$_SESSION['user'];
+							$stmt = $conn->prepare($emailsql);
+							$stmt->execute();
+						}
 					}
 				?>
 				
