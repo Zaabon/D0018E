@@ -1,108 +1,173 @@
 <!doctype html>
 <html>
-<head>
-<?php include 'connect.php';?>
+	<head>
+		<meta charset="utf-8">
+		<?php include 'connect.php';?>
+		<title>FunProducts.se</title>
+		<link href="stylesheet.css" rel="stylesheet" type="text/css">
+	</head>
 
-<meta charset="utf-8">
-<title>Test</title>
-
-
-
-<link href="stylesheat.css" rel="stylesheet" type="text/css">
-
-</head>
-
-<body style="background-color:#DDDDDD;">
-	<div id="wrapper">
-		<div id="header">
-			<p>header</p>
+	<body>
+		<div id="header">						
+			<?php include("header_template.php");?>
 		</div>
-		<div id ="menu">
-			<p>menu</p>				
-			<?php
-			if(isset($_SESSION["user"])) {
-				echo "Logged in as ".$_SESSION['user']."<br>";
-				echo "<button onclick='logOut();'>Log out</button>";
-			}
+		<div id="messages">
+			<?php 
+				if( ! empty($_SESSION['login_error_msg']))
+				{
+				    echo "<p style='color: red;'>".$_SESSION['login_error_msg']."</p>";
+				    unset($_SESSION['login_error_msg']);
+				}
 			?>
 			
-		</div>
-		<div id="content">
-			<p><b>Sign up</b></p>
-			<form action="/~olfjoh-5/login.php" method="post" id="form" name="form"> 
-
-				<label for="name">Name:</label> <br />
-				<input type="text" id="name" /> <br />
-
-				<label for="email">Email:</label> <br />
-				<input type="email" id="email" /> <br />
-
-				<label for="password">Password:</label> <br />
-				<input type="password" id="password" /> <br />
-
-				<input type="submit" id="createAccount" value="Create" />
-
-			</form>
-			
-			<br><br>
-			<p><b>Sign in</b></p>			
-			<form action="/~olfjoh-5/login.php" method="post">
-			  	Email:<br>
-			 	 <input type="text" name="email"><br>
-				Password:<br>
-			 	 <input type="password" name="pwd"><br>
-
-				<input type="submit" id="login" value="Login" />
-			</form>
-			<?php if(isset($_GET['error'])) {
-				if($_GET['error'] === "login") {
-				 echo "<br><font color='red'>Incorrect email or password</font>";
+			<script>
+				function orderView() {
+					window.location = "orderView.php";
 				}
-			}?>
-
-		<br><br>
-		<b>Articles</b><br>
-		<table>
-			<tr>
-		<th></th>
-	    	<th>Name</th>
-    		<th>Price</th> 
-    		<th>Description</th>
-		<th></th>
-		</tr>
-		<?php
-
-		$sql = "SELECT * FROM Articles"; 
-		foreach ($conn->query($sql) as $row) {
-			?><tr>
-			    <td><?php if(isset($row['picture'])) {
-				echo "<img src='gfx/".$row['picture']."' style='max-width:100px; max-height:100px;'>";
-			    } ?></td>
-			    <td><?php echo "<a href='product.php?id=".$row['id']."'>";
-				echo $row['name'];?></a></td>
-			    <td><?php echo $row['price'].":-";?></td> 
-			    <td><?php echo $row['description'];?></td>
-			    <td><?php 
-
-
-
-//echo "<input type='button' onclick='location.href=\"checkout.php?id=".$row['id']."\";' value='Buy' />";?>
-			    </td>
-			  </tr>
-				
-		
+			</script>
 			
-
-		<?php } ?>
-		</table>
-
-
+			<script>
+				function order() {
+					window.location = "order.php";
+				}
+			</script>
+		
+		
+			<div id="content">
+				<div id="top3">
+					<h3>Newest products</h3>
+					
+					<?php $latest = "SELECT * FROM Articles ORDER BY id DESC LIMIT 3";
+						
+					foreach ($conn->query($latest) as $latestrow) {?>
+						<div id = "category">
+							<table>
+								<td>
+									<?php
+										echo "<h3 style='margin-top: 0px; margin-bottom: 0px;'><a style='text-decoration: none; color: black;' href='product.php?id=".$latestrow['id']."'>".$latestrow['name']."</a></h3>";
+										echo "<p style='margin-top: 0px;'><a href='product.php?id=".$latestrow['id']."'><img src='gfx/".$latestrow['picture']."' style='max-width:200px; max-height:150px; margin-right: 10px;'></a></p>";
+									?>
+								</td>
+								<td>
+									<?php
+										echo "<p><b>Price: </b>".$latestrow['price'].":-</p>";
+										echo "<p><b>In stock: </b>".$latestrow['stock']."</p>";
+										echo "<p><b>Rate: </b>".round($latestrow['rate'], 1, PHP_ROUND_HALF_DOWN)."/5</p>";
+									?>
+									<table>
+										<td>
+											<form action="./buy.php" method="post">
+												<?php
+													echo '<input type="hidden" name="id" value="'.$latestrow["id"].'">';
+													echo '<input type="hidden" name="price" value="'.$latestrow["price"].'">';
+												?>
+											  	<input type="number" name="quantity" min="1" style="width:40px" required>
+												<input type="submit" id="buy" value="Buy" />
+											</form>
+										</td>
+										<td>
+											<?php //include 'wish_button.php';?>
+										</td>
+									</table>
+								</td>
+							</table>
+						</div>
+					<?php } ?>
+					<form action="./search.php" method="get">
+						<input type="submit" value="see more"/>
+						<select name ="filters" hidden><option selected value="newest"/></select>
+					</form>
+				</div>
+				<div style="clear:both;"></div>
+				<div id="rated">
+					<h3>Top rated products</h3>
+					<?php $top = "SELECT * FROM Articles ORDER BY rate DESC LIMIT 3";
+						
+					foreach ($conn->query($top) as $toprow) {?>
+						<div id = "category">
+							<table>
+								<td>
+									<?php
+										echo "<h3 style='margin-top: 0px; margin-bottom: 0px;'><a style='text-decoration: none; color: black;' href='product.php?id=".$toprow['id']."'>".$toprow['name']."</a></h3>";
+										echo "<p style='margin-top: 0px;'><a href='product.php?id=".$toprow['id']."'><img src='gfx/".$toprow['picture']."' style='max-width:200px; max-height:150px; margin-right: 10px;'></a></p>";
+									?>
+								</td>
+								<td>
+									<?php
+										echo "<p><b>Price: </b>".$toprow['price'].":-</p>";
+										echo "<p><b>In stock: </b>".$toprow['stock']."</p>";
+										echo "<p><b>Rate: </b>".round($toprow['rate'], 1, PHP_ROUND_HALF_DOWN)."/5</p>";
+									?>
+									<table>
+										<td>
+											<form action="./buy.php" method="post">
+												<?php
+													echo '<input type="hidden" name="id" value="'.$toprow["id"].'">';
+													echo '<input type="hidden" name="price" value="'.$toprow["price"].'">';
+												?>
+											  	<input type="number" name="quantity" min="1" style="width:40px" required>
+												<input type="submit" id="buy" value="Buy" />
+											</form>
+										</td>
+										<td>
+											<?php //include 'wish_button.php';?>
+										</td>
+									</table>
+								</td>
+							</table>
+						</div>
+					<?php } ?>
+					<form action="./search.php" method="get">
+						<input type="submit" value="see more"/>
+						<select name ="filters" hidden><option selected value="highest rate"/></select>
+					</form>
+				</div>
+				<div style="clear:both;"></div>
+				<div id="rated" style="display: block;">
+					<h3>Cheapest prices</h3>
+					
+					<?php $low = "SELECT * FROM Articles ORDER BY price ASC LIMIT 3";?>
+					
+					<?php foreach ($conn->query($low) as $lowrow) {?>
+						<div id = "category">
+							<table>
+								<td>
+									<?php
+										echo "<h3 style='margin-top: 0px; margin-bottom: 0px;'><a style='text-decoration: none; color: black;' href='product.php?id=".$toprow['id']."'>".$lowrow['name']."</a></h3>";
+										echo "<p style='margin-top: 0px;'><a href='product.php?id=".$lowrow['id']."'><img src='gfx/".$lowrow['picture']."' style='max-width:200px; max-height:150px; margin-right: 10px;'></a></p>";
+									?>
+								</td>
+								<td>
+									<?php
+										echo "<p><b>Price: </b>".$lowrow['price'].":-</p>";
+										echo "<p><b>In stock: </b>".$lowrow['stock']."</p>";
+										echo "<p><b>Rate: </b>".round($lowrow['rate'], 1, PHP_ROUND_HALF_DOWN)."/5</p>";
+									?>
+									<table>
+										<td>
+											<form action="./buy.php" method="post">
+												<?php
+													echo '<input type="hidden" name="id" value="'.$lowrow["id"].'">';
+													echo '<input type="hidden" name="price" value="'.$lowrow["price"].'">';
+												?>
+											  	<input type="number" name="quantity" min="1" style="width:40px" required>
+												<input type="submit" id="buy" value="Buy" />
+											</form>
+										</td>
+										<td>
+											<?php //include 'wish_button.php';?>
+										</td>
+									</table>
+								</td>
+							</table>
+						</div>
+					<?php } ?>
+					<form action="./search.php" method="get">
+						<input type="submit" value="see more"/>
+						<select name ="filters" hidden><option selected value="lowest price"/></select>
+					</form>
+				</div>
+			</div>
 		</div>
-	</div>
-
-
-
-</body>
-
-<?php $conn = null; ?>
+	</body>
 </html>
