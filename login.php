@@ -32,18 +32,22 @@ else if(isset($_POST['change_pwd'])){
 	header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 else {
+	// Parameterized query to prevent SQL injection
+	$sql = "SELECT * FROM Accounts WHERE email=:email"; 
+	$sth = $conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+	$sth->execute(array(':email' => $_POST['email']));
+	$user = $sth->fetchAll();
+
+	$pwd = $user[0]['pwd'];
+	
+	
 	echo $_POST['email'];
-
-	$sql = "SELECT * FROM Accounts WHERE Email='".$_POST['email']."'"; 
-	foreach ($conn->query($sql) as $row) {
-		    $pwd = $row['pwd'];
-	}
-
 	echo $_POST['pwd'];
-	//if($_POST['pwd'] == $pwd) {
+	
+
 	if(password_verify($_POST['pwd'], $pwd)){
 		echo "<br>Ok<br>";
-		$_SESSION['user'] = $row['id'];
+		$_SESSION['user'] = $user[0]['id'];;
 		echo "ID: ".$_SESSION["user"];
 	
 	}
